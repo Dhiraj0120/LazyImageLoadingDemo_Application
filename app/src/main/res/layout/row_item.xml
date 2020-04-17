@@ -6,11 +6,11 @@
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/main_title"
+        android:id="@+id/row_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
-        android:text="QWERTY"
+        android:text="@string/title"
         android:textColor="@android:color/holo_blue_dark"
         android:textSize="22sp"
         android:textStyle="normal" />
@@ -21,16 +21,16 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/main_description"
-            android:layout_width="wrap_content"
+            android:id="@+id/row_description"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Description"
+            android:text="@string/description"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
         <ImageView
-            android:id="@+id/main_imageview"
+            android:id="@+id/row_imageview"
             android:layout_width="145dp"
             android:layout_height="100dp"
             android:src="@mipmap/ic_launcher" />
