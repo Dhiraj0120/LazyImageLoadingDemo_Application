@@ -1,16 +1,14 @@
-package com.demo.lazyimageloadingdemo_application
+package com.demo.lazyimageloadingdemo_application.adapters
 
 import android.content.Context
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.demo.lazyimageloadingdemo_application.model.ListData
+import com.demo.lazyimageloadingdemo_application.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_item.view.*
-import java.net.URI
-import androidx.core.net.toUri as toUri1
 
 class MainAdapter(
     val listData: ListData,
@@ -30,7 +28,9 @@ class MainAdapter(
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.row_item, parent, false)
         //layoutInflater.inflate(R.layout.row_item, parent, false)
-        return CustomViewHolder(view)
+        return CustomViewHolder(
+            view
+        )
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {

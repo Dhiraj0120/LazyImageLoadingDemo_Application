@@ -1,4 +1,4 @@
-package com.demo.lazyimageloadingdemo_application
+package com.demo.lazyimageloadingdemo_application.model
 
 class ListData(val title: String, val rows: List<Rows>)
 

@@ -1,8 +1,9 @@
-package com.demo.lazyimageloadingdemo_application
+package com.demo.lazyimageloadingdemo_application.activity
 
 import android.annotation.SuppressLint
 import android.app.Service
 import android.graphics.Color
+import android.graphics.Typeface
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
@@ -10,8 +11,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+import com.demo.lazyimageloadingdemo_application.model.ListData
+import com.demo.lazyimageloadingdemo_application.adapters.MainAdapter
+import com.demo.lazyimageloadingdemo_application.R
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.*
@@ -21,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     var context = this
     var connectivity: ConnectivityManager? = null
     var info: NetworkInfo? = null
-    var pullToRefresh: SwipeRefreshLayout? = null
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +35,8 @@ class MainActivity : AppCompatActivity() {
         no_internet.setTextColor(Color.RED)
         no_internet.visibility = View.GONE
         recycleview_main?.visibility = View.VISIBLE
-        pullToRefresh = findViewById(R.id.pullToRefresh) as SwipeRefreshLayout
-        pullToRefresh?.setOnRefreshListener{}
 
-        //(SwipeRefreshLayout.OnRefreshListener { pullToRefresh?.setRefreshing(false) })
+        refresh_button.setOnClickListener(View.OnClickListener { fetchJson() })
     }
 
     override fun onStart() {
@@ -82,9 +82,8 @@ class MainActivity : AppCompatActivity() {
                 if (listData.rows.isNullOrEmpty() || listData.rows.size == 0) {
                     no_internet.setText(resources.getText(R.string.no_internet_found))
                 } else {
-                    runOnUiThread {
-                        recycleview_main.adapter = MainAdapter(listData, applicationContext)
-                    }
+                    loadDataInList(listData)
+
                 }
             }
 
@@ -94,45 +93,18 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-
-    private fun SwipeRefreshLayout?.setOnRefreshListener(onRefreshListener: OnRefreshListener?) {
-
-        onRefreshListener?.onRefresh() {
-            println("Pulling..........")
-            pullToRefresh?.setRefreshing(false)
-            pullToRefresh?.isRefreshing = false
-            Toast.makeText(context, "Refreshing Please wait....", Toast.LENGTH_LONG).show()
-            if (isConnected()) {
-                no_internet.visibility = View.GONE
-                recycleview_main?.visibility = View.VISIBLE
-                fetchJson()
-            } else {
-                no_internet.visibility = View.VISIBLE
-                recycleview_main?.visibility = View.GONE
-                Toast.makeText(context, "No Internet Connection", Toast.LENGTH_LONG).show()
-            }
-
-            println("Pulling..........")
+    private fun loadDataInList(listData: ListData){
+        runOnUiThread {
+            page_title.setText(listData.title)
+            page_title.setTextSize(22F)
+            page_title.setTypeface(Typeface.DEFAULT_BOLD)
+            page_title.setTextColor(Color.BLUE)
+            recycleview_main.adapter =
+                MainAdapter(
+                    listData,
+                    applicationContext
+                )
         }
-
-    }
-
-    private fun OnRefreshListener?.onRefresh(function: () -> Unit) {
-        println("Pulling..........")
-        pullToRefresh?.setRefreshing(false)
-
-        Toast.makeText(context, "Refreshing Please wait....", Toast.LENGTH_LONG).show()
-        if (isConnected()) {
-            no_internet.visibility = View.GONE
-            recycleview_main?.visibility = View.VISIBLE
-            fetchJson()
-        } else {
-            no_internet.visibility = View.VISIBLE
-            recycleview_main?.visibility = View.GONE
-            Toast.makeText(context, "No Internet Connection", Toast.LENGTH_LONG).show()
-        }
-
-        println("Pulling..........")
     }
 }
 
